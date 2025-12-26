@@ -61,8 +61,8 @@ def model_validation():
 
 with DAG(
     dag_id="mlops_automated_pipeline",
-    start_date=datetime(2025, 12, 24),
-    schedule_interval=None,
+    start_date=datetime(2025, 12, 26),
+    schedule_interval="0 0 * * *",
     catchup=False,
     tags=["mlops", "training"],
 ) as dag:
