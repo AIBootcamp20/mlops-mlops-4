@@ -10,7 +10,7 @@ import numpy as np
 from sklearn.neural_network import MLPClassifier
 
 from src.utils.utils import model_dir, save_hash
-
+from src.utils.s3 import upload_to_s3
 
 @dataclass
 class ModelParams:
@@ -68,5 +68,15 @@ def model_save(model: MoviePredictor, model_params: Dict[str, Any], epoch: int, 
         pickle.dump(save_data, f)
 
     save_hash(dst)
+    run_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    filename = os.path.basename(dst)
+    s3_key = f"movie_predictor/{run_date}/{filename}"
+
+    upload_to_s3(
+        local_path=dst,
+        s3_key=s3_key,
+    )
+
     print(f"Model saved to {dst}")
+    print(f"Model uploaded to s3://{s3_key}")
     return dst
